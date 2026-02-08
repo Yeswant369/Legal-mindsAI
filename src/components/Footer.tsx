@@ -22,16 +22,16 @@ const Footer = () => (
           <h4 className="mb-3 text-sm font-semibold text-foreground">Product</h4>
           <div className="flex flex-col gap-2">
             <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-primary">Dashboard</Link>
-            <Link to="#" className="text-sm text-muted-foreground hover:text-primary">About</Link>
-            <Link to="#" className="text-sm text-muted-foreground hover:text-primary">Contact</Link>
+            <Link to="/about" className="text-sm text-muted-foreground hover:text-primary">About</Link>
+            <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary">Contact</Link>
           </div>
         </div>
         <div>
           <h4 className="mb-3 text-sm font-semibold text-foreground">Legal</h4>
           <div className="flex flex-col gap-2">
-            <Link to="#" className="text-sm text-muted-foreground hover:text-primary">Privacy Policy</Link>
-            <Link to="#" className="text-sm text-muted-foreground hover:text-primary">Terms of Service</Link>
-            <Link to="#" className="text-sm text-muted-foreground hover:text-primary">Support</Link>
+            <Link to="/privacy" className="text-sm text-muted-foreground hover:text-primary">Privacy Policy</Link>
+            <Link to="/terms" className="text-sm text-muted-foreground hover:text-primary">Terms of Service</Link>
+            <Link to="/support" className="text-sm text-muted-foreground hover:text-primary">Support</Link>
           </div>
         </div>
       </div>

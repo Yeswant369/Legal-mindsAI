@@ -1,4 +1,4 @@
-const N8N_WEBHOOK_URL = "https://vagdeviii.app.n8n.cloud/webhook-test/legal-document-upload";
+const N8N_WEBHOOK_URL = "https://navya-12345.app.n8n.cloud/webhook-test/0a234b24-61c9-4699-bb75-22e79d8e48eb";
 
 export interface WebhookPayload {
   project_name: string;

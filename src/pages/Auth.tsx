@@ -1,3 +1,5 @@
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/firebase";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -5,8 +7,7 @@ import { Scale, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -16,16 +17,28 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false); // Using local loading for auth check
+  const [authChecking, setAuthChecking] = useState(true); // To prevent flicker
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // For form submission
+
   const navigate = useNavigate();
-  const { session } = useAuth();
+  // const { user } = useAuth(); // We can use this, but following specific instructions to use onAuthStateChanged directly
 
   useEffect(() => {
-    if (session) {
-      navigate("/dashboard", { replace: true });
-    }
-  }, [session, navigate]);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/dashboard", { replace: true });
+      }
+      setAuthChecking(false);
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
+  if (authChecking) {
+    return null; // Or a loading spinner to prevent flicker
+  }
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,19 +53,8 @@ const Auth = () => {
 
     setLoading(true);
     try {
-      if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
-        if (error) throw error;
-        toast.success("Signed in successfully!");
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email: email.trim(),
-          password,
-          options: { emailRedirectTo: window.location.origin },
-        });
-        if (error) throw error;
-        toast.success("Check your email to confirm your account!");
-      }
+      // Supabase Email Auth Removed
+      toast.info("Email authentication is currently disabled. Please use Google Login.");
     } catch (error: any) {
       toast.error(error.message || "Authentication failed.");
     } finally {
@@ -60,15 +62,20 @@ const Auth = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setGoogleLoading(true);
+  const handleGoogleLogin = async () => {
+    setGoogleLoading(true); // Manually set loading state
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
-      });
-      if (result.error) throw result.error;
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      console.log("Logged in user:", result.user);
+      toast.success(`Welcome ${result.user.displayName || "User"}!`);
+      // Since we are bypassing the AuthContext (which listens to Supabase), 
+      // we might want to manually navigate or rely on the user to handle state.
+      // For now, just logging as requested. 
+      navigate("/dashboard");
     } catch (error: any) {
-      toast.error(error.message || "Google sign-in failed.");
+      console.error("Google login error:", error);
+      toast.error(error.message || "Google login failed.");
     } finally {
       setGoogleLoading(false);
     }
@@ -102,7 +109,7 @@ const Auth = () => {
               type="button"
               variant="outline"
               className="mb-4 w-full gap-2"
-              onClick={handleGoogleSignIn}
+              onClick={handleGoogleLogin}
               disabled={googleLoading}
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24">

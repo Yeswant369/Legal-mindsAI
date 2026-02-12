@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { RotateCcw, Mail, ArrowRight } from "lucide-react";
+import { RotateCcw, Mail, ArrowRight, Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -12,17 +11,37 @@ import SuccessScreen from "@/components/SuccessScreen";
 import { COUNTRIES } from "@/lib/countries";
 import { submitToWebhook } from "@/lib/webhook";
 import { auth } from "@/firebase";
+import { cn } from "@/lib/utils";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 
 type ViewState = "form" | "processing" | "success" | "error";
 
 const Dashboard = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [jurisdiction, setJurisdiction] = useState("");
+  const [open, setOpen] = useState(false);
   const [viewState, setViewState] = useState<ViewState>("form");
   const [processingStep, setProcessingStep] = useState(0);
-  const [webhookStatus, setWebhookStatus] = useState<"sending" | "processing" | "completed" | "failed">("sending");
+  const [webhookStatus, setWebhookStatus] = useState<
+    "sending" | "processing" | "completed" | "failed"
+  >("sending");
 
-  const canSubmit = files.length > 0 && !!jurisdiction && !!auth.currentUser;
+  const canSubmit =
+    files.length > 0 && !!jurisdiction && !!auth.currentUser;
 
   const resetForm = () => {
     setFiles([]);
@@ -83,11 +102,26 @@ const Dashboard = () => {
       <div className="min-h-screen bg-background">
         <Navbar />
         <div className="container mx-auto px-6 pt-28 pb-20">
-          <ProcessingScreen status={webhookStatus} currentStep={processingStep} analysisType="legal" />
+          <ProcessingScreen
+            status={webhookStatus}
+            currentStep={processingStep}
+            analysisType="legal"
+          />
           {webhookStatus === "failed" && (
             <div className="mt-6 text-center">
-              <Button onClick={handleSubmit} className="bg-gradient-hero text-primary-foreground">Retry</Button>
-              <Button onClick={resetForm} variant="outline" className="ml-3">Reset</Button>
+              <Button
+                onClick={handleSubmit}
+                className="bg-gradient-hero text-primary-foreground"
+              >
+                Retry
+              </Button>
+              <Button
+                onClick={resetForm}
+                variant="outline"
+                className="ml-3"
+              >
+                Reset
+              </Button>
             </div>
           )}
         </div>
@@ -119,10 +153,25 @@ const Dashboard = () => {
         <Navbar />
         <div className="container mx-auto px-6 pt-28 pb-20 text-center">
           <div className="mx-auto max-w-md rounded-2xl border border-destructive/20 bg-card p-8 shadow-card">
-            <h3 className="mb-3 font-sans text-xl font-bold text-foreground">Submission Failed</h3>
-            <p className="mb-6 text-sm text-muted-foreground">Something went wrong. Please try again.</p>
-            <Button onClick={handleSubmit} className="bg-gradient-hero text-primary-foreground">Retry</Button>
-            <Button onClick={resetForm} variant="outline" className="ml-3">Reset</Button>
+            <h3 className="mb-3 font-sans text-xl font-bold text-foreground">
+              Submission Failed
+            </h3>
+            <p className="mb-6 text-sm text-muted-foreground">
+              Something went wrong. Please try again.
+            </p>
+            <Button
+              onClick={handleSubmit}
+              className="bg-gradient-hero text-primary-foreground"
+            >
+              Retry
+            </Button>
+            <Button
+              onClick={resetForm}
+              variant="outline"
+              className="ml-3"
+            >
+              Reset
+            </Button>
           </div>
         </div>
       </div>
@@ -133,8 +182,14 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container mx-auto px-6 pt-28 pb-20">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 text-center">
-          <h1 className="mb-2 text-3xl font-bold text-foreground md:text-4xl">Document Analyzer</h1>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8 text-center"
+        >
+          <h1 className="mb-2 text-3xl font-bold text-foreground md:text-4xl">
+            Document Analyzer
+          </h1>
           <p className="text-muted-foreground">
             Upload your documents and get an AI-powered compliance analysis.
           </p>
@@ -143,26 +198,59 @@ const Dashboard = () => {
         <div className="mx-auto max-w-2xl space-y-6">
           <PdfUpload files={files} onFilesChange={setFiles} />
 
-          {/* Jurisdiction */}
+          {/* Searchable Jurisdiction */}
           <div>
             <label className="mb-2 block text-sm font-semibold text-foreground">
               Select Jurisdiction
             </label>
-            <Select value={jurisdiction} onValueChange={setJurisdiction}>
-              <SelectTrigger className="h-12">
-                <SelectValue placeholder="Choose a country..." />
-              </SelectTrigger>
-              <SelectContent className="max-h-64">
-                {COUNTRIES.map((c) => (
-                  <SelectItem key={c} value={c}>
-                    {c}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="w-full justify-between h-12"
+                >
+                  {jurisdiction || "Choose a country..."}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+
+              <PopoverContent className="w-full p-0">
+                <Command>
+                  <CommandInput placeholder="Search country..." />
+                  <CommandList>
+                    <CommandEmpty>No country found.</CommandEmpty>
+                    <CommandGroup className="max-h-60 overflow-y-auto">
+                      {COUNTRIES.map((country) => (
+                        <CommandItem
+                          key={country}
+                          value={country}
+                          onSelect={(value) => {
+                            setJurisdiction(value);
+                            setOpen(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              jurisdiction === country
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                          {country}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
 
-          {/* Auto Email Display */}
+          {/* Auto Email */}
           <div>
             <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
               <Mail className="h-4 w-4 text-primary" />
@@ -173,11 +261,12 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Actions */}
+          {/* Buttons */}
           <div className="flex items-center justify-between pt-2">
             <Button variant="outline" onClick={resetForm} className="gap-2">
               <RotateCcw className="h-4 w-4" /> Reset
             </Button>
+
             <Button
               onClick={handleSubmit}
               disabled={!canSubmit}

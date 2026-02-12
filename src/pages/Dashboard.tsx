@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { RotateCcw, Mail, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -69,18 +69,20 @@ const Dashboard = () => {
     }
   };
 
+  // 👇 NEW FUNCTION (ONLY FOR DEMO BUTTONS)
+  const loadDemo = async (path: string, name: string) => {
+    const response = await fetch(path);
+    const blob = await response.blob();
+    const file = new File([blob], name, { type: "application/pdf" });
+    setFiles([file]);
+  };
+
   if (viewState === "processing") {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
         <div className="container mx-auto px-6 pt-28 pb-20">
           <ProcessingScreen status={webhookStatus} currentStep={processingStep} analysisType="legal" />
-          {webhookStatus === "failed" && (
-            <div className="mt-6 text-center">
-              <Button onClick={handleSubmit} className="bg-gradient-hero text-primary-foreground">Retry</Button>
-              <Button onClick={resetForm} variant="outline" className="ml-3">Reset</Button>
-            </div>
-          )}
         </div>
       </div>
     );
@@ -111,7 +113,6 @@ const Dashboard = () => {
         <div className="container mx-auto px-6 pt-28 pb-20 text-center">
           <div className="mx-auto max-w-md rounded-2xl border border-destructive/20 bg-card p-8 shadow-card">
             <h3 className="mb-3 font-sans text-xl font-bold text-foreground">Submission Failed</h3>
-            <p className="mb-6 text-sm text-muted-foreground">Something went wrong. Please try again.</p>
             <Button onClick={handleSubmit} className="bg-gradient-hero text-primary-foreground">Retry</Button>
             <Button onClick={resetForm} variant="outline" className="ml-3">Reset</Button>
           </div>
@@ -130,8 +131,32 @@ const Dashboard = () => {
         </motion.div>
 
         <div className="mx-auto max-w-2xl space-y-6">
+
           {/* PDF Upload */}
           <PdfUpload files={files} onFilesChange={setFiles} />
+
+          {/* ✅ DEMO SECTION ADDED */}
+          <div className="rounded-xl border bg-card p-4">
+            <h3 className="mb-3 font-semibold text-foreground">Try a Demo Document</h3>
+
+            <div className="flex flex-col gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => loadDemo("/demo/hr-demo.pdf", "hr-demo.pdf")}
+              >
+                Use HR Demo PDF
+              </Button>
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => loadDemo("/demo/client-demo.pdf", "client-demo.pdf")}
+              >
+                Use Client Policy Demo PDF
+              </Button>
+            </div>
+          </div>
 
           {/* Jurisdiction */}
           <div>
@@ -161,9 +186,6 @@ const Dashboard = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="h-12"
             />
-            {email.length > 0 && !emailValid && (
-              <p className="mt-2 text-xs text-destructive">Please enter a valid email address.</p>
-            )}
           </div>
 
           {/* Actions */}
@@ -179,6 +201,7 @@ const Dashboard = () => {
               Analyze Documents <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
+
         </div>
       </div>
       <Footer />
@@ -187,4 +210,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

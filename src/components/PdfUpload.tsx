@@ -8,27 +8,53 @@ interface PdfUploadProps {
 }
 
 const PdfUpload = ({ files, onFilesChange }: PdfUploadProps) => {
+  // Merge new files safely
+  const mergeFiles = (newFiles: File[]) => {
+    const combined = [...files, ...newFiles];
+
+    // Remove duplicates (by name + size)
+    const unique = combined.filter(
+      (file, index, self) =>
+        index ===
+        self.findIndex(
+          (f) => f.name === file.name && f.size === file.size
+        )
+    );
+
+    onFilesChange(unique);
+  };
+
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
+
       const dropped = Array.from(e.dataTransfer.files).filter(
         (f) => f.type === "application/pdf"
       );
-      if (dropped.length) onFilesChange([...files, ...dropped]);
+
+      if (dropped.length) {
+        mergeFiles(dropped);
+      }
     },
-    [files, onFilesChange]
+    [files]
   );
 
   const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(e.target.files || []).filter(
       (f) => f.type === "application/pdf"
     );
-    if (selected.length) onFilesChange([...files, ...selected]);
+
+    if (selected.length) {
+      mergeFiles(selected);
+    }
+
+    // Reset input so same file can be reselected
     e.target.value = "";
   };
 
   const removeFile = (index: number) => {
-    onFilesChange(files.filter((_, i) => i !== index));
+    const updated = files.filter((_, i) => i !== index);
+    onFilesChange(updated);
   };
 
   return (
@@ -37,7 +63,7 @@ const PdfUpload = ({ files, onFilesChange }: PdfUploadProps) => {
         Upload PDF Documents
       </label>
 
-      {/* File list */}
+      {/* File List */}
       {files.length > 0 && (
         <div className="space-y-2">
           {files.map((file, i) => (
@@ -52,12 +78,15 @@ const PdfUpload = ({ files, onFilesChange }: PdfUploadProps) => {
                   <FileText className="h-4 w-4 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-foreground">{file.name}</p>
+                  <p className="text-sm font-medium text-foreground">
+                    {file.name}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {(file.size / 1024 / 1024).toFixed(2)} MB
                   </p>
                 </div>
               </div>
+
               <button
                 onClick={() => removeFile(i)}
                 className="rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
@@ -69,7 +98,7 @@ const PdfUpload = ({ files, onFilesChange }: PdfUploadProps) => {
         </div>
       )}
 
-      {/* Drop zone */}
+      {/* Drop Zone */}
       <div
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleDrop}
@@ -82,6 +111,7 @@ const PdfUpload = ({ files, onFilesChange }: PdfUploadProps) => {
           onChange={handleSelect}
           className="absolute inset-0 cursor-pointer opacity-0"
         />
+
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
           {files.length > 0 ? (
             <Plus className="h-5 w-5 text-primary" />
@@ -89,6 +119,7 @@ const PdfUpload = ({ files, onFilesChange }: PdfUploadProps) => {
             <Upload className="h-5 w-5 text-primary" />
           )}
         </div>
+
         <div className="text-center">
           <p className="text-sm font-medium text-foreground">
             {files.length > 0

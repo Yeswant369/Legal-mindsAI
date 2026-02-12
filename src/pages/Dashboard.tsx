@@ -17,7 +17,7 @@ type ViewState = "form" | "processing" | "success" | "error";
 
 const Dashboard = () => {
   const [files, setFiles] = useState<File[]>([]);
-  const [jurisdiction, setJurisdiction] = useState("");
+  const [jurisdiction, setJurisdiction] = useState("India");
   const [email, setEmail] = useState("");
   const [viewState, setViewState] = useState<ViewState>("form");
   const [processingStep, setProcessingStep] = useState(0);

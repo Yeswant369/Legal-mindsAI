@@ -10,7 +10,7 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { session, signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
   const links = [
     { to: "/", label: "Home" },
@@ -53,7 +53,7 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          {session ? (
+          {user ? (
             <div className="flex items-center gap-3">
               <Link to="/dashboard">
                 <Button size="sm" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
@@ -98,7 +98,7 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
-            {session ? (
+            {user ? (
               <>
                 <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
                   <Button className="w-full bg-gradient-hero text-primary-foreground">

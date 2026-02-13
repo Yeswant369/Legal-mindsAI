@@ -9,9 +9,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const contactInfo = [
-  { icon: Mail, label: "Email", value: "support@legalmind.ai", href: "mailto:support@legalmind.ai" },
-  { icon: Phone, label: "Phone", value: "+1 (555) 123-4567", href: "tel:+15551234567" },
-  { icon: MapPin, label: "Address", value: "123 Legal Tech Drive, San Francisco, CA 94105", href: null },
+  { icon: Mail, label: "Email", value: "legalMindsAI@gmail.com", href: "mailto:legalMindsAI@gmail.com" },
+  { icon: Phone, label: "Phone", value: "(+(91)7036356681", href: "tel:+91 7036356681" },
+  { icon: MapPin, label: "Address", value: "VijayaWada, India, MainCity", href: null },
 ];
 
 const Contact = () => {
@@ -151,7 +151,7 @@ const Contact = () => {
                 <MessageSquare className="mb-3 h-8 w-8 text-primary" />
                 <h3 className="mb-2 font-sans text-lg font-semibold text-foreground">Live Support</h3>
                 <p className="text-sm text-muted-foreground">
-                  Our support team is available Monday through Friday, 9 AM to 6 PM PST. Typical response time is under 2 hours.
+                  Our support team is available Monday through Sunday, 9 AM to 6 PM PST. Typical response time is under 1 hour.
                 </p>
               </div>
             </motion.div>

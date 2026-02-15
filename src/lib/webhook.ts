@@ -1,4 +1,4 @@
-const N8N_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || "https://yeswant.app.n8n.cloud/webhook-test/legalmind-webhook";
+const N8N_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || "https://jxnxrdhxn.app.n8n.cloud/webhook-test/legalmind";
 
 export interface WebhookPayload {
   project_name: string;

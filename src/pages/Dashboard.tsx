@@ -132,7 +132,7 @@ const Dashboard = () => {
       <div className="min-h-screen bg-white">
         <Navbar />
         <div className="container mx-auto px-6 pt-28 pb-20 text-center">
-          <div className="mx-auto max-w-md rounded-2xl border border-red-200 bg-white p-8 shadow-sm">
+          <div className="mx-auto max-w-md rounded-2xl border border-red-200 bg-white p-8 shadow-[0_8px_30px_rgba(15,42,95,0.08)]">
             <h3 className="mb-4 text-xl font-semibold text-slate-900">
               Submission Failed
             </h3>
@@ -140,7 +140,7 @@ const Dashboard = () => {
             <div className="flex justify-center gap-4">
               <Button
                 onClick={handleSubmit}
-                className="h-11 bg-[#0F2A5F] text-white hover:bg-[#163A7A] transition-all"
+                className="h-11 bg-[#0F2A5F] text-white hover:bg-[#173C7D] hover:shadow-[0_6px_18px_rgba(15,42,95,0.25)] transition-all duration-200"
               >
                 Retry
               </Button>
@@ -148,7 +148,7 @@ const Dashboard = () => {
               <Button
                 onClick={resetForm}
                 variant="outline"
-                className="h-11 border-slate-300"
+                className="h-11 border-slate-300 hover:border-slate-400 transition-all"
               >
                 Reset
               </Button>
@@ -165,15 +165,15 @@ const Dashboard = () => {
 
       <div className="container mx-auto px-6 pt-28 pb-24">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-12 text-center"
         >
-          <h1 className="mb-3 text-4xl font-bold text-slate-900">
-            Document Analysis Portal
+          <h1 className="mb-3 text-4xl font-bold text-slate-900 tracking-tight">
+            Institutional Document Analysis
           </h1>
           <p className="text-slate-600">
-            Institutional-grade compliance evaluation for legal and HR documents.
+            Structured compliance evaluation with audit-ready output.
           </p>
         </motion.div>
 
@@ -182,7 +182,7 @@ const Dashboard = () => {
           <PdfUpload files={files} onFilesChange={setFiles} />
 
           {/* Demo Section */}
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_10px_40px_rgba(15,42,95,0.06)]">
             <h3 className="mb-4 text-lg font-semibold text-slate-900">
               Demo Documents
             </h3>
@@ -190,18 +190,30 @@ const Dashboard = () => {
             <div className="flex flex-col gap-4">
               <Button
                 variant="outline"
-                className="h-11 border-slate-300 hover:bg-slate-50 transition-all"
                 onClick={() => loadDemo("/demo/hr-demo.pdf", "hr-demo.pdf")}
+                className="
+                  h-11 border-slate-300
+                  hover:border-[#0F2A5F]
+                  hover:bg-slate-50
+                  hover:shadow-[0_4px_12px_rgba(15,42,95,0.15)]
+                  transition-all duration-200
+                "
               >
                 Use HR Demo PDF
               </Button>
 
               <Button
                 variant="outline"
-                className="h-11 border-slate-300 hover:bg-slate-50 transition-all"
                 onClick={() =>
                   loadDemo("/demo/client-demo.pdf", "client-demo.pdf")
                 }
+                className="
+                  h-11 border-slate-300
+                  hover:border-[#0F2A5F]
+                  hover:bg-slate-50
+                  hover:shadow-[0_4px_12px_rgba(15,42,95,0.15)]
+                  transition-all duration-200
+                "
               >
                 Use Client Policy Demo PDF
               </Button>
@@ -215,7 +227,7 @@ const Dashboard = () => {
             </label>
 
             <Select value={jurisdiction} onValueChange={setJurisdiction}>
-              <SelectTrigger className="h-12 border-slate-300 focus:ring-0">
+              <SelectTrigger className="h-12 border-slate-300 focus:border-[#0F2A5F] focus:ring-0 transition-all">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="max-h-64">
@@ -240,7 +252,12 @@ const Dashboard = () => {
               placeholder="you@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-12 border-slate-300 focus:ring-0"
+              className="
+                h-12 border-slate-300
+                focus:border-[#0F2A5F]
+                focus:shadow-[0_0_0_2px_rgba(15,42,95,0.15)]
+                transition-all
+              "
             />
           </div>
 
@@ -249,7 +266,13 @@ const Dashboard = () => {
             <Button
               variant="outline"
               onClick={resetForm}
-              className="h-11 border-slate-300 hover:bg-slate-50 transition-all gap-2"
+              className="
+                h-11 gap-2
+                border-slate-300
+                hover:border-slate-400
+                hover:bg-slate-50
+                transition-all duration-200
+              "
             >
               <RotateCcw className="h-4 w-4" /> Reset
             </Button>
@@ -261,9 +284,9 @@ const Dashboard = () => {
                 h-11 px-6 gap-2
                 bg-[#0F2A5F]
                 text-white
-                hover:bg-[#163A7A]
+                hover:bg-[#173C7D]
+                hover:shadow-[0_8px_22px_rgba(15,42,95,0.35)]
                 transition-all duration-200
-                shadow-md hover:shadow-lg
                 disabled:opacity-40
               "
             >

@@ -58,7 +58,7 @@ const Navbar = () => {
           {user ? (
             <div className="flex items-center gap-3">
               <Link to="/dashboard">
-                <Button size="sm" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
+                <Button size="sm" className="bg-[#0F2A5F] text-white hover:bg-[#12367A] shadow-none">
                   Analyze Document
                 </Button>
               </Link>
@@ -68,7 +68,7 @@ const Navbar = () => {
             </div>
           ) : (
             <Link to="/auth">
-              <Button size="sm" className="bg-gradient-hero text-primary-foreground hover:opacity-90">
+              <Button size="sm" className="bg-[#0F2A5F] text-white hover:bg-[#12367A] shadow-none">
                 Sign In
               </Button>
             </Link>

@@ -27,7 +27,7 @@ const features = [
 const steps = [
   { num: "01", icon: Upload, title: "Upload Document(s)", desc: "Upload your PDF legal or HR policy documents securely." },
   { num: "02", icon: Globe, title: "Select Jurisdiction", desc: "Choose the country whose laws apply to your analysis." },
-  { num: "03", icon: Mail, title: "Receive Report", desc: "Get a detailed compliance report delivered to your email." },
+  { num: "03", icon: Mail, title: "Receive Report", desc: "Get a structured compliance report delivered to your email." },
 ];
 
 const Index = () => (
@@ -35,22 +35,22 @@ const Index = () => (
     <Navbar />
 
     {/* Hero */}
-    <section className="relative overflow-hidden pt-24 pb-20 md:pt-32 md:pb-24">
-      <div className="container relative mx-auto px-6 text-center">
+    <section className="pt-28 pb-20 md:pt-36 md:pb-28">
+      <div className="container mx-auto px-6 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <span className="mb-4 inline-block rounded-md border border-slate-300 px-4 py-1.5 text-xs font-semibold tracking-wide text-slate-700">
+          <span className="mb-4 inline-block rounded-full border border-slate-300 bg-slate-100 px-4 py-1.5 text-xs font-semibold tracking-wide text-slate-700">
             LEGAL INTELLIGENCE PLATFORM
           </span>
 
-          <h1 className="mx-auto mb-6 max-w-3xl text-4xl font-semibold leading-tight text-foreground md:text-6xl">
+          <h1 className="mx-auto mb-6 max-w-3xl text-4xl font-bold leading-tight text-slate-900 md:text-6xl">
             Turn Complex Legal Documents into Clear Decisions
           </h1>
 
-          <p className="mx-auto mb-8 max-w-xl text-lg text-muted-foreground">
+          <p className="mx-auto mb-8 max-w-xl text-lg text-slate-600">
             Upload any legal or HR policy document, select your jurisdiction, and receive a structured compliance analysis report within minutes.
           </p>
 
@@ -58,7 +58,7 @@ const Index = () => (
             <Link to="/dashboard">
               <Button
                 size="lg"
-                className="bg-slate-900 px-8 text-white hover:bg-slate-800 shadow-none"
+                className="bg-[#0F2A5F] px-8 text-white hover:bg-[#12367A] shadow-none"
               >
                 Analyze Document
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -66,7 +66,7 @@ const Index = () => (
             </Link>
 
             <a href="#how-it-works">
-              <Button size="lg" variant="outline" className="px-8">
+              <Button size="lg" variant="outline" className="border-slate-300 text-slate-800">
                 How It Works
               </Button>
             </a>
@@ -78,81 +78,63 @@ const Index = () => (
     {/* Features */}
     <section className="py-20">
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-14 text-center"
-        >
-          <h2 className="mb-3 text-3xl font-semibold text-foreground md:text-4xl">
+        <div className="mb-14 text-center">
+          <h2 className="mb-3 text-3xl font-bold text-slate-900 md:text-4xl">
             Comprehensive Compliance Analysis
           </h2>
-          <p className="mx-auto max-w-lg text-muted-foreground">
-            Everything required to evaluate document risk, regulatory alignment, and compliance exposure.
+          <p className="mx-auto max-w-lg text-slate-600">
+            Everything you need to ensure your documents meet legal and policy requirements.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((f, i) => (
-            <motion.div
+          {features.map((f) => (
+            <div
               key={f.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08 }}
-              className="group rounded-lg border border-border bg-card p-6 transition-all hover:shadow-md"
+              className="rounded-xl border border-slate-200 bg-white p-6 transition hover:shadow-md"
             >
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-md bg-slate-100">
-                <f.icon className="h-5 w-5 text-slate-700" />
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-slate-100">
+                <f.icon className="h-5 w-5 text-[#0F2A5F]" />
               </div>
-              <h3 className="mb-2 text-lg font-semibold text-foreground">{f.title}</h3>
-              <p className="text-sm text-muted-foreground">{f.desc}</p>
-            </motion.div>
+              <h3 className="mb-2 text-lg font-semibold text-slate-900">{f.title}</h3>
+              <p className="text-sm text-slate-600">{f.desc}</p>
+            </div>
           ))}
         </div>
       </div>
     </section>
 
     {/* How It Works */}
-    <section id="how-it-works" className="bg-muted/40 py-20">
+    <section id="how-it-works" className="bg-slate-50 py-20">
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-14 text-center"
-        >
-          <h2 className="mb-3 text-3xl font-semibold text-foreground md:text-4xl">
+        <div className="mb-14 text-center">
+          <h2 className="mb-3 text-3xl font-bold text-slate-900 md:text-4xl">
             How It Works
           </h2>
-          <p className="mx-auto max-w-lg text-muted-foreground">
-            A structured three-step workflow designed for clarity and speed.
+          <p className="mx-auto max-w-lg text-slate-600">
+            Three structured steps to compliance clarity.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid gap-8 md:grid-cols-3">
-          {steps.map((s, i) => (
-            <motion.div
+          {steps.map((s) => (
+            <div
               key={s.num}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.12 }}
-              className="rounded-lg border border-border bg-card p-8 text-center"
+              className="rounded-xl border border-slate-200 bg-white p-8 text-center"
             >
-              <span className="mb-3 block text-4xl font-bold text-slate-300">
+              <span className="mb-3 block text-4xl font-bold text-slate-200">
                 {s.num}
               </span>
 
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-slate-900">
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#0F2A5F]">
                 <s.icon className="h-5 w-5 text-white" />
               </div>
 
-              <h3 className="mb-2 text-lg font-semibold text-foreground">
+              <h3 className="mb-2 text-lg font-semibold text-slate-900">
                 {s.title}
               </h3>
-              <p className="text-sm text-muted-foreground">{s.desc}</p>
-            </motion.div>
+              <p className="text-sm text-slate-600">{s.desc}</p>
+            </div>
           ))}
         </div>
       </div>
@@ -161,30 +143,24 @@ const Index = () => (
     {/* CTA */}
     <section className="py-20">
       <div className="container mx-auto px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mx-auto max-w-2xl rounded-lg bg-slate-900 p-10"
-        >
-          <h2 className="mb-4 text-3xl font-semibold text-white md:text-4xl">
+        <div className="mx-auto max-w-2xl rounded-xl bg-[#0F2A5F] p-10">
+          <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">
             Ready to Simplify Compliance?
           </h2>
-
-          <p className="mb-8 text-gray-300">
-            Begin structured document analysis and reduce regulatory exposure today.
+          <p className="mb-8 text-white/80">
+            Start analyzing your legal and HR documents in minutes, not days.
           </p>
 
           <Link to="/dashboard">
             <Button
               size="lg"
-              className="bg-white text-slate-900 hover:bg-gray-100 shadow-none"
+              className="bg-white text-[#0F2A5F] hover:bg-gray-100 shadow-none"
             >
               Get Started
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
 

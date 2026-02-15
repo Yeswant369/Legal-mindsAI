@@ -6,32 +6,30 @@ export default function ImpactDashboard() {
   // VERIFIED PUBLIC DATA
   // =============================
 
-  const districtPending = 46500000; // NJDG
-  const highCourtPending = 6363000; // NJDG
-  const supremePending = 92201;     // NJDG
+  const districtPending = 46500000;
+  const highCourtPending = 6363000;
+  const supremePending = 92201;
 
   const totalPending =
     districtPending +
     highCourtPending +
     supremePending;
 
-  // Daksh Litigation Cost Study
   const attendanceCost = 1039;
   const productivityLoss = 1746;
-
   const totalDailyBurden =
-    attendanceCost + productivityLoss; // ₹2785
+    attendanceCost + productivityLoss;
 
   // =============================
   // USER VARIABLES
   // =============================
 
-  const [adoption, setAdoption] = useState(20);
-  const [effectiveness, setEffectiveness] = useState(40);
+  const [adoption, setAdoption] = useState(30);
+  const [effectiveness, setEffectiveness] = useState(27);
   const [animatedValue, setAnimatedValue] = useState(0);
 
   // =============================
-  // ECONOMIC MODEL
+  // CORE CALCULATIONS
   // =============================
 
   const annualEconomicExposure =
@@ -39,10 +37,13 @@ export default function ImpactDashboard() {
     totalDailyBurden *
     365;
 
-  const projectedSavings =
-    annualEconomicExposure *
+  const nationalImpactRate =
     (adoption / 100) *
     (effectiveness / 100);
+
+  const projectedSavings =
+    annualEconomicExposure *
+    nationalImpactRate;
 
   // =============================
   // ANIMATION
@@ -69,38 +70,26 @@ export default function ImpactDashboard() {
   return (
     <div style={{ padding: "40px", maxWidth: "1000px", margin: "auto" }}>
       <h1 style={{ textAlign: "center" }}>
-        Judicial Pendency & Economic Impact Model (India)
+        Judicial Pendency & Economic Impact Model
       </h1>
-
-      {/* =============================
-          VERIFIED DATA SECTION
-         ============================= */}
-
-      <div style={{ marginTop: "30px", lineHeight: "1.8" }}>
-        <h3>Verified Judicial Data (NJDG – 2026)</h3>
-        <ul>
-          <li>District Courts: {districtPending.toLocaleString()}</li>
-          <li>High Courts: {highCourtPending.toLocaleString()}</li>
-          <li>Supreme Court: {supremePending.toLocaleString()}</li>
-          <li>
-            Total Pending Cases: {totalPending.toLocaleString()}
-          </li>
-        </ul>
-
-        <h4>Daksh Litigation Cost Study</h4>
-        <ul>
-          <li>Daily Attendance Cost: ₹{attendanceCost}</li>
-          <li>Daily Productivity Loss: ₹{productivityLoss}</li>
-          <li>Total Daily Economic Burden: ₹{totalDailyBurden}</li>
-        </ul>
-      </div>
 
       {/* =============================
           SLIDERS
          ============================= */}
 
       <div style={{ marginTop: "40px" }}>
-        <h3>Adoption Rate: {adoption}%</h3>
+        <h3>
+          Adoption Rate: {adoption}%
+          <br />
+          <small>
+            (How many people in the affected population are actually using LegalMindsAI?
+            It is about coverage. If adoption = {adoption}%, that means
+            {` ${adoption}% of litigants or potential litigants are exposed to the solution.
+            It does NOT mean disputes reduce by ${adoption}%.
+            Think of it like vaccination coverage.`})
+          </small>
+        </h3>
+
         <input
           type="range"
           min="5"
@@ -113,8 +102,17 @@ export default function ImpactDashboard() {
         />
       </div>
 
-      <div style={{ marginTop: "20px" }}>
-        <h3>Effectiveness Rate: {effectiveness}%</h3>
+      <div style={{ marginTop: "40px" }}>
+        <h3>
+          Effectiveness Rate: {effectiveness}%
+          <br />
+          <small>
+            (Among users, how much does the system reduce errors or disputes?
+            If effectiveness = {effectiveness}%, it means disputes reduce
+            by {effectiveness}% within the adopted group.)
+          </small>
+        </h3>
+
         <input
           type="range"
           min="10"
@@ -128,12 +126,44 @@ export default function ImpactDashboard() {
       </div>
 
       {/* =============================
-          RESULT
+          NATIONAL IMPACT BAR
+         ============================= */}
+
+      <div style={{ marginTop: "50px" }}>
+        <h3>Total National Impact: {(nationalImpactRate * 100).toFixed(2)}%</h3>
+
+        <div
+          style={{
+            height: "20px",
+            background: "#ddd",
+            borderRadius: "10px",
+          }}
+        >
+          <div
+            style={{
+              width: `${nationalImpactRate * 100}%`,
+              height: "100%",
+              background: "green",
+              borderRadius: "10px",
+              transition: "width 0.5s ease-in-out",
+            }}
+          />
+        </div>
+
+        <small>
+          (This equals Adoption × Effectiveness.
+          Example: {adoption}% × {effectiveness}% =
+          {(nationalImpactRate * 100).toFixed(2)}% total reduction nationally.)
+        </small>
+      </div>
+
+      {/* =============================
+          RESULT DISPLAY
          ============================= */}
 
       <div
         style={{
-          marginTop: "40px",
+          marginTop: "50px",
           padding: "30px",
           background: "#111",
           color: "white",
@@ -149,8 +179,7 @@ export default function ImpactDashboard() {
           })}
         </h1>
         <p>
-          Based on total pendency × verified daily cost ×
-          adoption × effectiveness
+          (Based on total pendency × verified daily cost × national impact rate)
         </p>
       </div>
 
@@ -158,8 +187,8 @@ export default function ImpactDashboard() {
           LIVE FORMULA
          ============================= */}
 
-      <div style={{ marginTop: "40px", lineHeight: "1.8" }}>
-        <h3>Live Calculation</h3>
+      <div style={{ marginTop: "50px", lineHeight: "1.8" }}>
+        <h3>Live Formula</h3>
 
         <p>
           Annual Exposure =
@@ -167,53 +196,16 @@ export default function ImpactDashboard() {
         </p>
 
         <p>
-          = ₹{annualEconomicExposure.toLocaleString()}
+          National Impact Rate =
+          {adoption}% × {effectiveness}% =
+          {(nationalImpactRate * 100).toFixed(2)}%
         </p>
 
         <p>
           Projected Savings =
-          ₹{annualEconomicExposure.toLocaleString()}
-          × {adoption}% × {effectiveness}%
+          ₹{annualEconomicExposure.toLocaleString()} ×
+          {(nationalImpactRate * 100).toFixed(2)}%
         </p>
-
-        <h4>
-          = ₹{projectedSavings.toLocaleString()}
-        </h4>
-      </div>
-
-      {/* =============================
-          10 YEAR CONTEXT
-         ============================= */}
-
-      <div style={{ marginTop: "50px", lineHeight: "1.8" }}>
-        <h3>10-Year Backlog Exposure Context</h3>
-        <p>
-          If annual economic exposure remains similar,
-          10-year cumulative modeled burden:
-        </p>
-
-        <h2>
-          ₹{(annualEconomicExposure * 10).toLocaleString()}
-        </h2>
-
-        <p style={{ color: "gray" }}>
-          This is a modeled exposure estimate based on
-          verified pendency and Daksh litigation cost study.
-          It is not an officially published national loss figure.
-        </p>
-      </div>
-
-      {/* =============================
-          SOURCES
-         ============================= */}
-
-      <div style={{ marginTop: "50px", fontSize: "14px" }}>
-        <h3>Sources</h3>
-        <ul>
-          <li>NJDG: https://njdg.ecourts.gov.in</li>
-          <li>Daksh Access to Justice Study</li>
-          <li>NCLT Backlog Reports (capital lock ₹10–15 lakh crore)</li>
-        </ul>
       </div>
     </div>
   );

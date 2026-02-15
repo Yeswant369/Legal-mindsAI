@@ -10,9 +10,11 @@ const Footer = () => (
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-hero">
               <Scale className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="text-lg font-bold text-foreground">
-              LEGAL<span className="text-gradient-hero font-display">MIND</span>
-            </span>
+            <span className="text-xl font-bold tracking-tight">
+  <span className="text-[#0F2A5F]">LEGAL</span>
+  <span className="text-slate-700">MIND</span>
+</span>
+
           </Link>
           <p className="max-w-sm text-sm text-muted-foreground">
             AI-powered legal and HR policy intelligence. Turn complex documents into clear, actionable compliance insights.

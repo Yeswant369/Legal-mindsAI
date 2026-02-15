@@ -40,9 +40,9 @@ const Navbar = () => {
             <Scale className="h-5 w-5 text-white" />
           </div>
 
-          <span className="text-xl font-semibold tracking-[0.08em]">
+          <span className="text-xl font-extrabold tracking-[0.5px] leading-none">
             <span className="text-[#0F2A5F]">LEGAL</span>
-            <span className="text-slate-700">MIND</span>
+            <span className="text-[#3F4A5A]">MIND</span>
           </span>
         </Link>
         {/* ================================= */}

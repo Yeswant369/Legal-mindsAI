@@ -1,58 +1,51 @@
 import React, { useState, useEffect } from "react";
 
 export default function ImpactDashboard() {
+  /* =============================
+     OFFICIAL PUBLIC DATA (2026)
+     ============================= */
 
-  // =============================
-  // VERIFIED PUBLIC DATA
-  // =============================
+  // NJDG + Supreme Court (Feb 2026 consolidated)
+  const totalPendingCases = 52955201; // 5.29+ crore combined courts
+  const civilCases = 15500000; // Approx combined civil (district + HC + SC)
+  const criminalCases = totalPendingCases - civilCases;
 
-  const districtPending = 46500000;
-  const highCourtPending = 6363000;
-  const supremePending = 92201;
+  // Daksh Litigation Cost Study
+  const attendanceCostPerDay = 1039;
+  const productivityLossPerDay = 1746;
+  const totalDailyCost = attendanceCostPerDay + productivityLossPerDay;
 
-  const totalPending =
-    districtPending +
-    highCourtPending +
-    supremePending;
-
-  const attendanceCost = 1039;
-  const productivityLoss = 1746;
-  const totalDailyBurden =
-    attendanceCost + productivityLoss;
-
-  // =============================
-  // USER VARIABLES
-  // =============================
+  /* =============================
+     USER CONTROLS
+     ============================= */
 
   const [adoption, setAdoption] = useState(30);
-  const [effectiveness, setEffectiveness] = useState(27);
+  const [effectiveness, setEffectiveness] = useState(25);
   const [animatedValue, setAnimatedValue] = useState(0);
 
-  // =============================
-  // CORE CALCULATIONS
-  // =============================
+  /* =============================
+     ANALYTICAL MODEL
+     ============================= */
 
-  const annualEconomicExposure =
-    totalPending *
-    totalDailyBurden *
-    365;
+  // Annual national litigation exposure
+  const annualExposure =
+    totalPendingCases * totalDailyCost * 365;
 
+  // National reduction = Adoption × Effectiveness
   const nationalImpactRate =
-    (adoption / 100) *
-    (effectiveness / 100);
+    (adoption / 100) * (effectiveness / 100);
 
   const projectedSavings =
-    annualEconomicExposure *
-    nationalImpactRate;
+    annualExposure * nationalImpactRate;
 
-  // =============================
-  // ANIMATION
-  // =============================
+  /* =============================
+     ANIMATION
+     ============================= */
 
   useEffect(() => {
     let start = 0;
     const end = projectedSavings;
-    const duration = 800;
+    const duration = 1000;
     const increment = end / (duration / 20);
 
     const timer = setInterval(() => {
@@ -67,51 +60,100 @@ export default function ImpactDashboard() {
     return () => clearInterval(timer);
   }, [projectedSavings]);
 
+  /* =============================
+     UI
+     ============================= */
+
   return (
-    <div style={{ padding: "40px", maxWidth: "1000px", margin: "auto" }}>
-      <h1 style={{ textAlign: "center" }}>
-        Judicial Pendency & Economic Impact Model
+    <div
+      style={{
+        padding: "20px 25px",
+        maxWidth: "1100px",
+        margin: "auto",
+        fontSize: "16px",
+      }}
+    >
+      <h1
+        style={{
+          textAlign: "center",
+          fontSize: "36px",
+          fontWeight: "700",
+          marginBottom: "25px",
+        }}
+      >
+        Judicial Pendency & Economic Impact Model (India)
       </h1>
 
       {/* =============================
-          SLIDERS
+         OFFICIAL DATA
          ============================= */}
 
-      <div style={{ marginTop: "40px" }}>
-        <h3>
+      <div style={{ lineHeight: "1.7", marginBottom: "30px" }}>
+        <h2 style={{ fontSize: "22px" }}>Official Recorded Data (2026)</h2>
+
+        <p>
+          • Total Pending Cases:{" "}
+          <strong>{totalPendingCases.toLocaleString()}</strong>
+        </p>
+
+        <p>
+          • Civil Cases: {civilCases.toLocaleString()}  
+          (≈ {Math.round((civilCases / totalPendingCases) * 100)}%)
+        </p>
+
+        <p>
+          • Criminal Cases: {criminalCases.toLocaleString()}  
+          (≈ {Math.round((criminalCases / totalPendingCases) * 100)}%)
+        </p>
+
+        <p>
+          • Daksh Study – Daily Attendance Cost: ₹{attendanceCostPerDay}
+        </p>
+
+        <p>
+          • Daksh Study – Daily Productivity Loss: ₹{productivityLossPerDay}
+        </p>
+
+        <p>
+          • Total Daily Economic Burden Per Case: ₹{totalDailyCost}
+        </p>
+      </div>
+
+      {/* =============================
+         SLIDER SECTION
+         ============================= */}
+
+      <div style={{ marginBottom: "25px" }}>
+        <h3 style={{ fontSize: "20px" }}>
           Adoption Rate: {adoption}%
-          <br />
-          <small>
-            (How many people in the affected population are actually using LegalMindsAI?
-            It is about coverage. If adoption = {adoption}%, that means
-            {` ${adoption}% of litigants or potential litigants are exposed to the solution.
-            It does NOT mean disputes reduce by ${adoption}%.
-            Think of it like vaccination coverage.`})
-          </small>
         </h3>
+        <small style={{ fontSize: "14px" }}>
+          (How many litigants or potential litigants are actually using
+          LegalMindsAI? If adoption = {adoption}%, that means {adoption}% of
+          affected individuals are exposed to the solution. It does NOT mean
+          disputes reduce by {adoption}%. Think of it like vaccination
+          coverage.)
+        </small>
 
         <input
           type="range"
           min="5"
           max="80"
           value={adoption}
-          onChange={(e) =>
-            setAdoption(Number(e.target.value))
-          }
-          style={{ width: "100%" }}
+          onChange={(e) => setAdoption(Number(e.target.value))}
+          style={{ width: "100%", marginTop: "10px" }}
         />
       </div>
 
-      <div style={{ marginTop: "40px" }}>
-        <h3>
+      <div style={{ marginBottom: "25px" }}>
+        <h3 style={{ fontSize: "20px" }}>
           Effectiveness Rate: {effectiveness}%
-          <br />
-          <small>
-            (Among users, how much does the system reduce errors or disputes?
-            If effectiveness = {effectiveness}%, it means disputes reduce
-            by {effectiveness}% within the adopted group.)
-          </small>
         </h3>
+        <small style={{ fontSize: "14px" }}>
+          (Among users, how much does the system reduce errors or disputes?
+          If effectiveness = {effectiveness}%, disputes reduce by {effectiveness}%
+          within the adopted group.)
+        </small>
 
         <input
           type="range"
@@ -121,22 +163,31 @@ export default function ImpactDashboard() {
           onChange={(e) =>
             setEffectiveness(Number(e.target.value))
           }
-          style={{ width: "100%" }}
+          style={{ width: "100%", marginTop: "10px" }}
         />
       </div>
 
       {/* =============================
-          NATIONAL IMPACT BAR
+         NATIONAL IMPACT BAR
          ============================= */}
 
-      <div style={{ marginTop: "50px" }}>
-        <h3>Total National Impact: {(nationalImpactRate * 100).toFixed(2)}%</h3>
+      <div style={{ marginBottom: "25px" }}>
+        <h3 style={{ fontSize: "20px" }}>
+          Total National Impact:{" "}
+          {(nationalImpactRate * 100).toFixed(2)}%
+        </h3>
+        <small>
+          (This equals Adoption × Effectiveness →{" "}
+          {adoption}% × {effectiveness}% ={" "}
+          {(nationalImpactRate * 100).toFixed(2)}% total reduction nationally.)
+        </small>
 
         <div
           style={{
-            height: "20px",
+            height: "14px",
             background: "#ddd",
-            borderRadius: "10px",
+            borderRadius: "8px",
+            marginTop: "10px",
           }}
         >
           <div
@@ -144,67 +195,110 @@ export default function ImpactDashboard() {
               width: `${nationalImpactRate * 100}%`,
               height: "100%",
               background: "green",
-              borderRadius: "10px",
-              transition: "width 0.5s ease-in-out",
+              borderRadius: "8px",
             }}
           />
         </div>
-
-        <small>
-          (This equals Adoption × Effectiveness.
-          Example: {adoption}% × {effectiveness}% =
-          {(nationalImpactRate * 100).toFixed(2)}% total reduction nationally.)
-        </small>
       </div>
 
       {/* =============================
-          RESULT DISPLAY
+         RESULT CARD
          ============================= */}
 
       <div
         style={{
-          marginTop: "50px",
-          padding: "30px",
+          padding: "25px 30px",
           background: "#111",
           color: "white",
           borderRadius: "10px",
           textAlign: "center",
+          marginTop: "30px",
         }}
       >
-        <h2>Modeled Annual Economic Exposure Reduction</h2>
-        <h1 style={{ fontSize: "40px" }}>
+        <h2 style={{ fontSize: "22px" }}>
+          Modeled Annual Economic Exposure Reduction
+        </h2>
+
+        <h1
+          style={{
+            fontSize: "50px",
+            fontWeight: "800",
+            letterSpacing: "1px",
+          }}
+        >
           ₹{" "}
           {animatedValue.toLocaleString(undefined, {
             maximumFractionDigits: 0,
           })}
         </h1>
+
         <p>
-          (Based on total pendency × verified daily cost × national impact rate)
+          (Based on total pendency × verified daily cost ×
+          national impact rate)
         </p>
       </div>
 
       {/* =============================
-          LIVE FORMULA
+         LIVE FORMULA
          ============================= */}
 
-      <div style={{ marginTop: "50px", lineHeight: "1.8" }}>
-        <h3>Live Formula</h3>
+      <div style={{ marginTop: "30px", lineHeight: "1.7" }}>
+        <h3>Live Calculation</h3>
 
         <p>
-          Annual Exposure =
-          {totalPending.toLocaleString()} × ₹{totalDailyBurden} × 365
+          Annual Exposure = {totalPendingCases.toLocaleString()} × ₹
+          {totalDailyCost} × 365
         </p>
 
         <p>
-          National Impact Rate =
-          {adoption}% × {effectiveness}% =
-          {(nationalImpactRate * 100).toFixed(2)}%
+          = ₹{annualExposure.toLocaleString()}
         </p>
 
         <p>
-          Projected Savings =
-          ₹{annualEconomicExposure.toLocaleString()} ×
-          {(nationalImpactRate * 100).toFixed(2)}%
+          Projected Savings = Annual Exposure × Adoption × Effectiveness
+        </p>
+
+        <p>
+          = ₹{annualExposure.toLocaleString()} × {adoption}% ×{" "}
+          {effectiveness}%  
+          = ₹{projectedSavings.toLocaleString()}
+        </p>
+      </div>
+
+      {/* =============================
+         SOURCES
+         ============================= */}
+
+      <div
+        style={{
+          marginTop: "40px",
+          fontSize: "13px",
+          lineHeight: "1.6",
+          color: "gray",
+        }}
+      >
+        <h3>Official Sources</h3>
+
+        <p>
+          National Judicial Data Grid (NJDG):  
+          https://njdg.ecourts.gov.in
+        </p>
+
+        <p>
+          Supreme Court Pendency Data:  
+          https://main.sci.gov.in
+        </p>
+
+        <p>
+          Daksh India Litigation Cost Study:  
+          https://dakshindia.org
+        </p>
+
+        <p>
+          *This model uses officially reported pendency figures and
+          published litigation cost research. The impact projection is
+          a modeled simulation and does not represent guaranteed
+          savings.
         </p>
       </div>
     </div>

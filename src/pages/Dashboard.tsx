@@ -71,7 +71,7 @@ const Dashboard = () => {
       setWebhookStatus("completed");
 
       setTimeout(() => setViewState("success"), 1000);
-      toast.success("Documents submitted successfully.");
+      toast.success("Documents submitted successfully!");
     } catch {
       clearInterval(stepInterval);
       setWebhookStatus("failed");
@@ -80,154 +80,87 @@ const Dashboard = () => {
     }
   };
 
-  const loadDemo = async (path: string, name: string) => {
-    const response = await fetch(path);
-    const blob = await response.blob();
-    const file = new File([blob], name, { type: "application/pdf" });
-
-    setFiles((prev) => {
-      const exists = prev.find(
-        (f) => f.name === file.name && f.size === file.size
-      );
-      if (exists) return prev;
-      return [...prev, file];
-    });
-  };
-
-  if (viewState === "processing") {
-    return (
-      <div className="min-h-screen bg-white">
-        <Navbar />
-        <div className="container mx-auto px-6 pt-28 pb-20">
-          <ProcessingScreen
-            status={webhookStatus}
-            currentStep={processingStep}
-            analysisType="legal"
-          />
-        </div>
-      </div>
-    );
-  }
-
-  if (viewState === "success") {
-    return (
-      <div className="min-h-screen bg-white">
-        <Navbar />
-        <div className="container mx-auto px-6 pt-28 pb-20">
-          <SuccessScreen
-            fileNames={files.map((f) => f.name)}
-            jurisdiction={jurisdiction}
-            email={email}
-            analysisType="legal"
-            onReset={resetForm}
-          />
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  if (viewState === "error") {
-    return (
-      <div className="min-h-screen bg-white">
-        <Navbar />
-        <div className="container mx-auto px-6 pt-28 pb-20 text-center">
-          <div className="mx-auto max-w-md rounded-2xl border border-red-200 bg-white p-8 shadow-[0_8px_30px_rgba(15,42,95,0.08)]">
-            <h3 className="mb-4 text-xl font-semibold text-slate-900">
-              Submission Failed
-            </h3>
-
-            <div className="flex justify-center gap-4">
-              <Button
-                onClick={handleSubmit}
-                className="h-11 bg-[#0F2A5F] text-white hover:bg-[#173C7D] hover:shadow-[0_6px_18px_rgba(15,42,95,0.25)] transition-all duration-200"
-              >
-                Retry
-              </Button>
-
-              <Button
-                onClick={resetForm}
-                variant="outline"
-                className="h-11 border-slate-300 hover:border-slate-400 transition-all"
-              >
-                Reset
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#F8FAFC]">
       <Navbar />
 
-      <div className="container mx-auto px-6 pt-28 pb-24">
+      <div className="container mx-auto px-6 pt-28 pb-20">
+
+        {/* HEADER */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-12 text-center"
         >
-          <h1 className="mb-3 text-4xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#0F172A]">
             Institutional Document Analysis
           </h1>
-          <p className="text-slate-600">
+          <p className="mt-3 text-slate-600 text-lg">
             Structured compliance evaluation with audit-ready output.
           </p>
         </motion.div>
 
-        <div className="mx-auto max-w-2xl space-y-8">
+        <div className="mx-auto max-w-3xl space-y-8">
 
-          <PdfUpload files={files} onFilesChange={setFiles} />
+          {/* Upload Section */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-[0_8px_30px_rgba(15,23,42,0.08)]">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">
+              Upload PDF Documents
+            </h3>
+
+            <PdfUpload files={files} onFilesChange={setFiles} />
+          </div>
 
           {/* Demo Section */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_10px_40px_rgba(15,42,95,0.06)]">
-            <h3 className="mb-4 text-lg font-semibold text-slate-900">
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-[0_8px_30px_rgba(15,23,42,0.08)]">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">
               Demo Documents
             </h3>
 
-            <div className="flex flex-col gap-4">
-              <Button
-                variant="outline"
-                onClick={() => loadDemo("/demo/hr-demo.pdf", "hr-demo.pdf")}
-                className="
-                  h-11 border-slate-300
-                  hover:border-[#0F2A5F]
-                  hover:bg-slate-50
-                  hover:shadow-[0_4px_12px_rgba(15,42,95,0.15)]
-                  transition-all duration-200
-                "
+            <div className="space-y-4">
+
+              <button
+                onClick={() =>
+                  fetch("/demo/hr-demo.pdf")
+                    .then(r => r.blob())
+                    .then(blob =>
+                      setFiles(prev => [
+                        ...prev,
+                        new File([blob], "hr-demo.pdf", { type: "application/pdf" })
+                      ])
+                    )
+                }
+                className="w-full h-12 rounded-lg border border-slate-300 bg-white text-slate-800 font-medium transition-all duration-200 hover:border-[#0F2A5F] hover:shadow-[0_6px_18px_rgba(15,42,95,0.15)]"
               >
                 Use HR Demo PDF
-              </Button>
+              </button>
 
-              <Button
-                variant="outline"
+              <button
                 onClick={() =>
-                  loadDemo("/demo/client-demo.pdf", "client-demo.pdf")
+                  fetch("/demo/client-demo.pdf")
+                    .then(r => r.blob())
+                    .then(blob =>
+                      setFiles(prev => [
+                        ...prev,
+                        new File([blob], "client-demo.pdf", { type: "application/pdf" })
+                      ])
+                    )
                 }
-                className="
-                  h-11 border-slate-300
-                  hover:border-[#0F2A5F]
-                  hover:bg-slate-50
-                  hover:shadow-[0_4px_12px_rgba(15,42,95,0.15)]
-                  transition-all duration-200
-                "
+                className="w-full h-12 rounded-lg border border-slate-300 bg-white text-slate-800 font-medium transition-all duration-200 hover:border-[#0F2A5F] hover:shadow-[0_6px_18px_rgba(15,42,95,0.15)]"
               >
                 Use Client Policy Demo PDF
-              </Button>
+              </button>
+
             </div>
           </div>
 
           {/* Jurisdiction */}
           <div>
-            <label className="mb-2 block text-sm font-semibold text-slate-900">
+            <label className="block text-sm font-semibold text-slate-900 mb-2">
               Select Jurisdiction
             </label>
-
             <Select value={jurisdiction} onValueChange={setJurisdiction}>
-              <SelectTrigger className="h-12 border-slate-300 focus:border-[#0F2A5F] focus:ring-0 transition-all">
+              <SelectTrigger className="h-12 border-slate-300 focus:ring-[#0F2A5F]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="max-h-64">
@@ -242,57 +175,39 @@ const Dashboard = () => {
 
           {/* Email */}
           <div>
-            <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-900">
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-900 mb-2">
               <Mail className="h-4 w-4 text-[#0F2A5F]" />
               Receive Analysis Report via Email
             </label>
-
             <Input
               type="email"
               placeholder="you@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="
-                h-12 border-slate-300
-                focus:border-[#0F2A5F]
-                focus:shadow-[0_0_0_2px_rgba(15,42,95,0.15)]
-                transition-all
-              "
+              className="h-12 border-slate-300 focus:ring-[#0F2A5F]"
             />
           </div>
 
           {/* Actions */}
           <div className="flex items-center justify-between pt-4">
-            <Button
-              variant="outline"
-              onClick={resetForm}
-              className="
-                h-11 gap-2
-                border-slate-300
-                hover:border-slate-400
-                hover:bg-slate-50
-                transition-all duration-200
-              "
-            >
-              <RotateCcw className="h-4 w-4" /> Reset
-            </Button>
 
-            <Button
+            <button
+              onClick={resetForm}
+              className="flex items-center gap-2 h-11 px-5 rounded-lg border border-slate-300 bg-white text-slate-700 font-medium transition-all duration-200 hover:border-slate-400 hover:shadow-md"
+            >
+              <RotateCcw className="h-4 w-4" />
+              Reset
+            </button>
+
+            <button
               onClick={handleSubmit}
               disabled={!canSubmit}
-              className="
-                h-11 px-6 gap-2
-                bg-[#0F2A5F]
-                text-white
-                hover:bg-[#173C7D]
-                hover:shadow-[0_8px_22px_rgba(15,42,95,0.35)]
-                transition-all duration-200
-                disabled:opacity-40
-              "
+              className="flex items-center gap-2 h-12 px-8 rounded-lg bg-[#0F2A5F] text-white font-semibold transition-all duration-200 hover:bg-[#12367A] hover:shadow-[0_8px_22px_rgba(15,42,95,0.25)] disabled:bg-slate-400 disabled:shadow-none"
             >
               Analyze Documents
               <ArrowRight className="h-4 w-4" />
-            </Button>
+            </button>
+
           </div>
         </div>
       </div>

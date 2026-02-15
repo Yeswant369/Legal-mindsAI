@@ -107,7 +107,7 @@ const About = () => (
           <Users className="mx-auto mb-4 h-12 w-12 text-primary" />
           <h2 className="mb-4 text-3xl font-bold text-foreground">Our Team</h2>
           <p className="text-muted-foreground">
-            LEGALMIND is built by a diverse team of legal experts, AI researchers, and software engineers passionate about making legal technology accessible. We're backed by leading investors who share our vision for democratizing legal compliance.
+            LEGALMIND is built by a team of students that are passionate about making legal technology accessible. We're backed by the vision for democratizing legal compliance,That help both People and Govt.
           </p>
         </motion.div>
       </div>

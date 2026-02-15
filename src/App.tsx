@@ -14,6 +14,8 @@ import Terms from "./pages/Terms";
 import Support from "./pages/Support";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ImpactDashboard from "./pages/ImpactDashboard";
+
 
 const queryClient = new QueryClient();
 
@@ -27,6 +29,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/impact" element={<ImpactDashboard />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />

@@ -17,6 +17,8 @@ const Navbar = () => {
     { to: "/dashboard", label: "Dashboard" },
     { to: "/about", label: "About" },
     { to: "/contact", label: "Contact" },
+    { to: "/impact", label: "Impact" },
+
   ];
 
   const handleSignOut = async () => {
